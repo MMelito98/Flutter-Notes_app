@@ -29,7 +29,8 @@
 .packages
 .pub-cache/
 .pub/
-.node_modules/
+node_modules/
+firebase
 /build/
 
 # Web related
