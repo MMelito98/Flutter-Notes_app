@@ -1,5 +1,8 @@
 import 'dart:ffi';
 
+import 'package:flutter/material.dart';
+
+import '../../utilities/show_err_dialog.dart';
 import 'auth_exceptions.dart';
 import 'auth_provider.dart';
 import 'auth_user.dart';
@@ -54,15 +57,39 @@ class FirebaseAuthProvider implements AuthProvider {
   Future<AuthUser?> logIn({
     required String email,
     required String password,
-  }) {
-    // TODO: implement logIn
-    throw UnimplementedError();
+  }) async{
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password
+      );
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        return AuthUser.fromFirebase(user);
+      } else {
+        return null;
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        throw UserNotFoundAuthException();
+      } else if (e.code == 'wrong-password') {
+        throw WrongPasswordAuthException();
+      } else{
+        throw GenericAuthException();
+      }
+    } catch (_){
+      throw GenericAuthException();
+    }
   }
 
   @override
-  Future<Void> logOut() {
-    // TODO: implement logOut
-    throw UnimplementedError();
+  Future<Void> logOut() async{
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null){
+      FirebaseAuth.instance.signOut();
+    } else{
+      throw UserNotLoggedInAuthException();
+    }
   }
 
   @override
