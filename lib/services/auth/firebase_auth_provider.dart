@@ -1,7 +1,9 @@
 import 'dart:ffi';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import '../../firebase_options.dart';
 import '../../utilities/show_err_dialog.dart';
 import 'auth_exceptions.dart';
 import 'auth_provider.dart';
@@ -39,7 +41,7 @@ class FirebaseAuthProvider implements AuthProvider {
       }
 
     } catch(_){
-
+      throw GenericAuthException();
     }
   }
 
@@ -86,7 +88,7 @@ class FirebaseAuthProvider implements AuthProvider {
   Future<Void> logOut() async{
     final user = FirebaseAuth.instance.currentUser;
     if (user != null){
-      FirebaseAuth.instance.signOut();
+      await FirebaseAuth.instance.signOut();
     } else{
       throw UserNotLoggedInAuthException();
     }
@@ -100,5 +102,12 @@ class FirebaseAuthProvider implements AuthProvider {
     } else {
       throw UserNotLoggedInAuthException();
     }
+  }
+
+  @override
+  Future<void> initialize() async{
+    future: Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   }
 }

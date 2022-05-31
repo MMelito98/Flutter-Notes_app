@@ -1,12 +1,12 @@
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:primo/constants/routes.dart';
-import '../firebase_options.dart';
+import 'package:primo/services/auth/auth_exceptions.dart';
+import 'package:primo/services/auth/auth_service.dart';
 import 'dart:developer' as devtools show log;
 
 import '../utilities/show_err_dialog.dart';
@@ -50,7 +50,8 @@ class _LoginViewState extends State<LoginView> {
       body: Column(children: [
         TextField(
           controller: _email,
-          decoration: const InputDecoration(hintText: 'Enter your email here'),
+          decoration: const InputDecoration(
+              hintText: 'Enter your email here'),
           enableSuggestions: false,
           autocorrect: false,
           keyboardType: TextInputType.emailAddress,
@@ -58,7 +59,8 @@ class _LoginViewState extends State<LoginView> {
         TextField(
           controller: _password,
           decoration:
-              const InputDecoration(hintText: 'Enter your password here'),
+              const InputDecoration(
+                  hintText: 'Enter your password here'),
           obscureText: true,
           enableSuggestions: false,
           autocorrect: false,
@@ -69,12 +71,12 @@ class _LoginViewState extends State<LoginView> {
             final password = _password.text;
 
             try {
-              await FirebaseAuth.instance.signInWithEmailAndPassword(
+              await AuthService.firebase().logIn(
                 email: email,
                 password: password,
               );
-              final user = FirebaseAuth.instance.currentUser;
-              if (user?.emailVerified ?? false) {
+              final user = AuthService.firebase().currentUser;
+              if (user?.isEmailVerified ?? false) {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   notesRoute,
                       (route) => false,
@@ -85,17 +87,23 @@ class _LoginViewState extends State<LoginView> {
                       (route) => false,
                 );
               }
-            }on FirebaseAuthException catch (e) {
-              if (e.code == 'user-not-found') {
-                await showErrorDialog(context, 'User Not Found',);
-              } else if (e.code == 'wrong-password') {
-                await showErrorDialog(context, 'Wrong Credentials',);
-              } else{
-                await showErrorDialog(context, 'Error: ${e.code}');
-              }
-            } catch (e){
-              await showErrorDialog(context, e.toString(),);
+            } on UserNotFoundAuthException {
+              await showErrorDialog(
+                context,
+                'User Not Found',
+              );
+            }  on WrongPasswordAuthException{
+                await showErrorDialog(
+                    context,
+                    'Wrong Password',
+                );
+            } on GenericAuthException{
+              await showErrorDialog(
+                  context,
+                  'Authentication Error',
+              );
             }
+
           },
           child: const Text('Login'),
         ),

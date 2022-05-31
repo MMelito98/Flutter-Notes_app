@@ -15,6 +15,9 @@ abstract class AuthProvider {
     required String password,
   });
 
+  Future<void> initialize();
+
+
   Future<Void> logOut();
 
   Future<Void> sendEmailVerification();

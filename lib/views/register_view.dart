@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:primo/constants/routes.dart';
+import 'package:primo/services/auth/auth_exceptions.dart';
+import 'package:primo/services/auth/auth_provider.dart';
+import 'package:primo/services/auth/auth_service.dart';
 import 'package:primo/utilities/show_err_dialog.dart';
 
 import '../firebase_options.dart';
@@ -46,7 +47,8 @@ class _RegisterViewState extends State<RegisterView> {
       body: Column(children: [
         TextField(
           controller: _email,
-          decoration: const InputDecoration(hintText: 'Enter your email here'),
+          decoration: const InputDecoration(
+              hintText: 'Enter your email here'),
           enableSuggestions: false,
           autocorrect: false,
           keyboardType: TextInputType.emailAddress,
@@ -54,7 +56,8 @@ class _RegisterViewState extends State<RegisterView> {
         TextField(
           controller: _password,
           decoration:
-              const InputDecoration(hintText: 'Enter your password here'),
+              const InputDecoration(
+                  hintText: 'Enter your password here'),
           obscureText: true,
           enableSuggestions: false,
           autocorrect: false,
@@ -64,48 +67,43 @@ class _RegisterViewState extends State<RegisterView> {
             final email = _email.text;
             final password = _password.text;
             try {
-              await FirebaseAuth.instance.createUserWithEmailAndPassword(
+              await AuthService.firebase().createUser(
                 email: email,
                 password: password,
               );
-              final user = FirebaseAuth.instance.currentUser;
-              await user?.sendEmailVerification();
+              final user = AuthService.firebase().currentUser;
+            //  AuthService.firebase().sendEmailVerification()
+              await AuthService.firebase().sendEmailVerification();
               Navigator.of(context).pushNamed(verifyEmailRoute);
-            } on FirebaseAuthException catch (e) {
-              if (e.code == 'weak-password') {
+            } on WeakPasswordAuthException {
                 await showErrorDialog(
                   context,
                   'Weak Password',
                 );
-              } else if (e.code == 'email-already-in-use') {
+              } on EmailAlreadyInUseAuthException{
                 await showErrorDialog(
                   context,
                   'Email is already in use',
                 );
-              } else if (e.code == 'invalid-email') {
+              } on InvalidEmailAuthException {
                 await showErrorDialog(
                   context,
                   'This is an Invalid Email address',
                 );
-              } else {
+              } on GenericAuthException{
                 await showErrorDialog(
                   context,
-                  'Error: ${e.code}',
+                  'Failed to Regiser',
                 );
               }
-            }catch(e){
-              await showErrorDialog(
-                context,
-                e.toString(),
-              );
-            }
-          },
+            },
           child: const Text('Register'),
         ),
         TextButton(
             onPressed: () {
               Navigator.of(context)
-                  .pushNamedAndRemoveUntil(loginRoute, (route) => false);
+                  .pushNamedAndRemoveUntil(
+                  loginRoute, (route) => false);
             },
             child: const Text('Already Registered? Login Here!'))
       ]),
