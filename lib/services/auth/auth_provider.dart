@@ -18,8 +18,8 @@ abstract class AuthProvider {
   Future<void> initialize();
 
 
-  Future<Void> logOut();
+  Future<void> logOut();
 
-  Future<Void> sendEmailVerification();
+  Future<void> sendEmailVerification();
 }
 //need getter to get current user
