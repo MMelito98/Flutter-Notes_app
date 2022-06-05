@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:primo/constants/routes.dart';
 import 'package:primo/services/auth/auth_service.dart';
 import 'package:primo/views/login_views.dart';
-import 'package:primo/views/notes_view.dart';
+import 'package:primo/views/notes/new_notes_view.dart';
+import 'package:primo/views/notes/notes_view.dart';
 import 'package:primo/views/register_view.dart';
 import 'package:primo/views/verify_email_view.dart';
 import 'dart:developer' as devtools show log;
@@ -22,6 +24,7 @@ void main() {
         registerRoute: (context) => const RegisterView(),
         notesRoute:(context) => const NotesView(),
         verifyEmailRoute:(context) => const VerifyEmailView(),
+        newNoteRoute:(context) => const NewNoteView(),
       },
     ),
   );

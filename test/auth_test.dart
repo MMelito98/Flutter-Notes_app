@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:primo/services/auth/auth_exceptions.dart';
 import 'package:primo/services/auth/auth_provider.dart';
@@ -60,16 +59,19 @@ void main() {
       expect(user.isEmailVerified, false);
     });
 
-    test('Logged in User should be able to be verified', (){
+    test('Logged in User should be able to be verified', () {
       provider.sendEmailVerification();
       final user = provider.currentUser;
       expect(user, isNotNull);
       expect(user!.isEmailVerified, true);
     });
-    
-    test('Should be able to log out and log in again', () async{
+
+    test('Should be able to log out and log in again', () async {
       await provider.logOut();
-      await provider.logIn(email: 'email', password: 'password',);
+      await provider.logIn(
+        email: 'email',
+        password: 'password',
+      );
       final user = provider.currentUser;
       expect(user, isNotNull);
     });
@@ -114,7 +116,10 @@ class MockAuthProvider implements AuthProvider {
     if (!isInitialized) throw NotInitializedException();
     if (email == 'foo@bar.com') throw UserNotFoundAuthException();
     if (password == 'foobar') throw WrongPasswordAuthException();
-    const user = AuthUser(isEmailVerified: false);
+    const user = AuthUser(
+      isEmailVerified: false,
+      email: 'foo@bar.com',
+    );
     _user = user;
     return Future.value(user);
   }
@@ -132,7 +137,7 @@ class MockAuthProvider implements AuthProvider {
     if (!isInitialized) throw NotInitializedException();
     final user = _user;
     if (user == null) throw UserNotFoundAuthException();
-    const newUser = AuthUser(isEmailVerified: true);
+    const newUser = AuthUser(isEmailVerified: true, email: 'foo@bar.com');
     _user = newUser;
   }
 }
