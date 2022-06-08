@@ -4,9 +4,9 @@ import 'package:primo/constants/routes.dart';
 import 'package:primo/services/auth/auth_exceptions.dart';
 import 'package:primo/services/auth/auth_provider.dart';
 import 'package:primo/services/auth/auth_service.dart';
-import 'package:primo/utilities/show_err_dialog.dart';
 
 import '../firebase_options.dart';
+import '../utilities/dialogs/error_dialog.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
