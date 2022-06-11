@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:primo/services/auth/auth_provider.dart';
@@ -10,14 +9,15 @@ import 'package:primo/views/notes/notes_list_view.dart';
 import '../../constants/routes.dart';
 import '../../enums/menu_action.dart';
 
-class NotesView extends StatefulWidget {
-  const NotesView({Key? key}) : super(key: key);
+class CreateUpdateNotesView extends StatefulWidget {
+  const CreateUpdateNotesView({Key? key}) : super(key: key);
 
   @override
-  State<NotesView> createState() => _NotesViewState();
+  State<CreateUpdateNotesView> createState() =>
+      _CreateUpdateNotesViewState();
 }
 
-class _NotesViewState extends State<NotesView> {
+class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
   late final NotesService _notesService;
 
   //gets the email
@@ -39,7 +39,7 @@ class _NotesViewState extends State<NotesView> {
         actions: [
           IconButton(
               onPressed: (){
-                Navigator.of(context).pushNamed(newNoteRoute);
+                Navigator.of(context).pushNamed(createUpdateNoteRoute);
               },
               icon: const Icon(Icons.add)),
           PopupMenuButton<MenuAction>(
@@ -80,12 +80,19 @@ class _NotesViewState extends State<NotesView> {
                       case ConnectionState.waiting:
                       case ConnectionState.active:
                         if (snapshot.hasData){
-                          final allNotes = snapshot.data as List<DatabaseNote>;
+                          final allNotes = snapshot.data as
+                            List<DatabaseNote>;
                           return NotesListView(
                               notes: allNotes,
                               onDeleteNote: (note) async {
-                                await _notesService.deleteNote(id: note.id);
+                                await _notesService
+                                    .deleteNote(id: note.id);
                               },
+                            onTap: (note)  {
+                              Navigator.of(context).pushNamed(
+                                  createUpdateNoteRoute,
+                                  arguments: note,);
+                            },
                           );
 
                         } else {

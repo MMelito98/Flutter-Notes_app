@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 import 'package:primo/constants/routes.dart';
 import 'package:primo/services/auth/auth_service.dart';
 import 'package:primo/views/login_views.dart';
-import 'package:primo/views/notes/new_notes_view.dart';
+import 'package:primo/views/notes/create_update_notes_view.dart';
 import 'package:primo/views/notes/notes_view.dart';
 import 'package:primo/views/register_view.dart';
 import 'package:primo/views/verify_email_view.dart';
@@ -22,9 +22,9 @@ void main() {
       routes: {
         loginRoute: (context) => const LoginView(),
         registerRoute: (context) => const RegisterView(),
-        notesRoute:(context) => const NotesView(),
+        notesRoute:(context) => const CreateUpdateNotesView(),
         verifyEmailRoute:(context) => const VerifyEmailView(),
-        newNoteRoute:(context) => const NewNoteView(),
+        createUpdateNoteRoute:(context) => const NewNoteView(),
       },
     ),
   );
@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
               if (user != null) {
                 if (user.isEmailVerified) {
                   devtools.log('Email is Verified');
-                  return const NotesView();
+                  return const CreateUpdateNotesView();
                 } else {
                   return const VerifyEmailView();
                 }
