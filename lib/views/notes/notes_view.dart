@@ -9,15 +9,15 @@ import 'package:primo/views/notes/notes_list_view.dart';
 import '../../constants/routes.dart';
 import '../../enums/menu_action.dart';
 
-class CreateUpdateNotesView extends StatefulWidget {
-  const CreateUpdateNotesView({Key? key}) : super(key: key);
+class NotesView extends StatefulWidget {
+  const NotesView({Key? key}) : super(key: key);
 
   @override
-  State<CreateUpdateNotesView> createState() =>
-      _CreateUpdateNotesViewState();
+  State<NotesView> createState() =>
+      _NotesViewState();
 }
 
-class _CreateUpdateNotesViewState extends State<CreateUpdateNotesView> {
+class _NotesViewState extends State<NotesView> {
   late final NotesService _notesService;
 
   //gets the email

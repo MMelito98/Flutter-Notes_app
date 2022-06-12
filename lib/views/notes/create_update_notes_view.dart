@@ -4,14 +4,14 @@ import 'package:primo/services/auth/auth_service.dart';
 import 'package:primo/services/crud/notes_service.dart';
 import 'package:primo/utilities/generics/get_arguments.dart';
 
-class NewNoteView extends StatefulWidget {
-  const NewNoteView({Key? key}) : super(key: key);
+class CreateUpdateNoteView extends StatefulWidget {
+  const CreateUpdateNoteView({Key? key}) : super(key: key);
 
   @override
-  State<NewNoteView> createState() => _NewNoteViewState();
+  State<CreateUpdateNoteView> createState() => _CreateUpdateNoteViewState();
 }
 
-class _NewNoteViewState extends State<NewNoteView> {
+class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   //Database optional as it could be empty
   DatabaseNote? _note;
   late final NotesService _notesService;
