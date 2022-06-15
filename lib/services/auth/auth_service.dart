@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:primo/services/auth/firebase_auth_provider.dart';
 
 import 'auth_user.dart';
