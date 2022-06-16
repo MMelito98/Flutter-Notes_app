@@ -4,9 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:primo/constants/routes.dart';
 import 'package:primo/services/auth/auth_exceptions.dart';
 import 'package:primo/services/auth/auth_service.dart';
+import 'package:primo/services/auth/bloc/auth_bloc.dart';
+import 'package:primo/services/auth/bloc/auth_event.dart';
 import 'dart:developer' as devtools show log;
 
 import '../utilities/dialogs/error_dialog.dart';
@@ -71,22 +74,11 @@ class _LoginViewState extends State<LoginView> {
             final password = _password.text;
 
             try {
-              await AuthService.firebase().logIn(
-                email: email,
-                password: password,
+              context.read<AuthBloc>().add(
+                  AuthEventLogin(
+                      email, password,
+                  )
               );
-              final user = AuthService.firebase().currentUser;
-              if (user?.isEmailVerified ?? false) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  notesRoute,
-                      (route) => false,
-                );
-              } else {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  verifyEmailRoute,
-                      (route) => false,
-                );
-              }
             } on UserNotFoundAuthException {
               await showErrorDialog(
                 context,
