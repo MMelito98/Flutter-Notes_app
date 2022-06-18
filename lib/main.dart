@@ -29,7 +29,8 @@ void main() {
         registerRoute: (context) => const RegisterView(),
         notesRoute:(context) => const NotesView(),
         verifyEmailRoute:(context) => const VerifyEmailView(),
-        createUpdateNoteRoute:(context) => const CreateUpdateNoteView(),
+        createUpdateNoteRoute:(context) =>
+          const CreateUpdateNoteView(),
       },
 
     ),
