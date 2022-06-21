@@ -6,6 +6,7 @@ import 'package:primo/services/auth/bloc/auth_bloc.dart';
 import 'package:primo/services/auth/bloc/auth_event.dart';
 import 'package:primo/services/auth/bloc/auth_state.dart';
 import 'package:primo/services/auth/firebase_auth_provider.dart';
+import 'package:primo/views/forgot_password_view.dart';
 import 'package:primo/views/login_views.dart';
 import 'package:primo/views/notes/create_update_notes_view.dart';
 import 'package:primo/views/notes/notes_view.dart';
@@ -58,7 +59,9 @@ class HomePage extends StatelessWidget {
         return const VerifyEmailView();
       } else if (state is AuthStateLoggedOut){
         return const LoginView();
-      } else if (state is AuthStateRegistering) {
+      } else if (state is AuthStateForgotPassword){
+        return const ForgotPasswordView();
+      }else if (state is AuthStateRegistering) {
         return const RegisterView();
       }else {
         return const Scaffold(
